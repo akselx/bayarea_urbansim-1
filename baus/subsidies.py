@@ -342,7 +342,7 @@ def calculate_vmt_fees(policy, year, buildings, vmt_fee_categories, coffer,
                 rename(columns={'county': 'county3'})
             # parcels_subzone has parcel_ids in XXXXX.9999 format by this step
             # temporarily fix them here
-            county_lookup.reset_index(level=0, inplace=True)
+            county_lookup.reset_index(inplace=True)
             county_lookup["PARCEL_ID"] = county_lookup["PARCEL_ID"].round().\
                 astype(int)
             df = df.merge(county_lookup, left_on='parcel_id',
