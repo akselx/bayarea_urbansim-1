@@ -340,17 +340,20 @@ def calculate_vmt_fees(policy, year, buildings, vmt_fee_categories, coffer,
             county_lookup = orca.get_table("parcels_subzone").to_frame()
             county_lookup = county_lookup[["county"]].\
                 rename(columns={'county': 'county3'})
-            # parcels_subzone has parcel_ids in XXXXXX.99999 format by this step
+            # parcels_subzone has parcel_ids in XXXXX.9999 format by this step
             # temporarily fix them here
             county_lookup.reset_index(level=0, inplace=True)
-            county_lookup["PARCEL_ID"] = county_lookup["PARCEL_ID"].round().astype(int)
+            county_lookup["PARCEL_ID"] = county_lookup["PARCEL_ID"].round().\
+                astype(int)
             df = df.merge(county_lookup, left_on='parcel_id',
-                right_on=county_lookup.PARCEL_ID, how='left').drop(["PARCEL_ID"], axis=1)
+                          right_on=county_lookup.PARCEL_ID,
+                          how='left').drop(["PARCEL_ID"], axis=1)
             # assign fee to parcels based on county
             counties3 = ['ala', 'cnc', 'mar', 'nap', 'scl', 'sfr', 'smt',
-                'sol', 'son']
+                         'sol', 'son']
             counties = ['alameda', 'contra_costa', 'marin', 'napa',
-                'santa_clara', 'san_francisco','san_mateo', 'solano', 'sonoma']
+                        'santa_clara', 'san_francisco', 'san_mateo', 'solano',
+                        'sonoma']
             for county3, county in zip(counties3, counties):
                 df.loc[df["county3"] == county3, "com_for_com_fees"] = \
                     df.vmt_res_cat.\
