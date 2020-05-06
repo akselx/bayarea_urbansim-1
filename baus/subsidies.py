@@ -346,7 +346,7 @@ def calculate_vmt_fees(policy, year, buildings, vmt_fee_categories, coffer,
             county_lookup["PARCEL_ID"] = county_lookup["PARCEL_ID"].round().\
                 astype(int)
             df = df.merge(county_lookup, left_on='parcel_id',
-                          right_on=county_lookup.PARCEL_ID,
+                          right_on='PARCEL_ID',
                           how='left').drop(["PARCEL_ID"], axis=1)
             # assign fee to parcels based on county
             counties3 = ['ala', 'cnc', 'mar', 'nap', 'scl', 'sfr', 'smt',
