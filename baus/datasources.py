@@ -225,7 +225,7 @@ def costar(store, parcels):
 
 @orca.table(cache=True)
 def zoning_lookup():
-    return pd.read_csv(os.path.join(misc.data_dir(), "zoning_lookup.csv"),
+    return pd.read_csv(os.path.join(misc.data_dir(), "2020_05_14_zoning_lookup_pba50.csv"),
                        index_col='id')
 
 
@@ -233,7 +233,7 @@ def zoning_lookup():
 @orca.table(cache=True)
 def zoning_baseline(parcels, zoning_lookup, settings):
     df = pd.read_csv(os.path.join(misc.data_dir(),
-                     "2015_12_21_zoning_parcels.csv"),
+                     "2020_05_14_zoning_parcels_pba50.csv"),
                      index_col="geom_id")
     df = pd.merge(df, zoning_lookup.to_frame(),
                   left_on="zoning_id", right_index=True)
@@ -396,7 +396,7 @@ def parcel_rejections():
 @orca.table(cache=True)
 def parcels_geography(parcels):
     df = pd.read_csv(
-        os.path.join(misc.data_dir(), "02_01_2016_parcels_geography.csv"),
+        os.path.join(misc.data_dir(), "2020_05_17_parcels_geography.csv"),
         index_col="geom_id")
     df = geom_id_to_parcel_id(df, parcels)
 
