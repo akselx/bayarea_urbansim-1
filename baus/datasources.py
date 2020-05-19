@@ -277,7 +277,7 @@ def costar(store, parcels):
 
 @orca.table(cache=True)
 def zoning_lookup():
-    return pd.read_csv(os.path.join(misc.data_dir(), "2020_05_14_zoning_lookup_pba50.csv"),
+    return pd.read_csv(os.path.join(misc.data_dir(), "2020_05_18_zoning_lookup_pba50.csv"),
                        index_col='id')
 
 
@@ -285,7 +285,7 @@ def zoning_lookup():
 @orca.table(cache=True)
 def zoning_baseline(parcels, zoning_lookup, settings):
     df = pd.read_csv(os.path.join(misc.data_dir(),
-                     "2020_05_14_zoning_parcels_pba50.csv"),
+                     "2020_05_18_zoning_parcels_pba50.csv"),
                      index_col="geom_id")
     df = pd.merge(df, zoning_lookup.to_frame(),
                   left_on="zoning_id", right_index=True)
@@ -479,7 +479,7 @@ def parcels_geography(parcels, scenario, settings):
     # assert no empty juris values
     assert True not in df.juris_name.isnull().value_counts()
 
-    df['juris_trich'] = df.juris_id + df.trich_id
+    df['juris_trich'] = df.juris + df.trich_id
 
     df["pda_id"] = df.pda_id.str.lower()
 
