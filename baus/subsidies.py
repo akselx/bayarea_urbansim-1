@@ -157,7 +157,7 @@ def inclusionary_housing_revenue_reduction(feasibility, units):
 # this adds fees to the max_profit column of the feasibility dataframe
 # fees are usually spatially specified and are per unit so that calculation
 # is done here as well
-def policy_modifications_of_profit(feasibility, parcels):
+def policy_modifications_of_profit(feasibility, parcels, developer_type):
 
     print("Making policy modifications to profitability")
 
@@ -245,11 +245,36 @@ def policy_modifications_of_profit(feasibility, parcels):
 
             feasibility[("residential", "max_profit")] *= pct_modifications
 
-    if "profitability_adjustment_policies" in policy["acct_settings"]:
-
+    if (developer_type == "for_profit") and ("profitability_adjustment_policies_for_profit_developer" in policy["acct_settings"]):
         for key, policy in \
                 policy["acct_settings"][
-                    "profitability_adjustment_policies"].items():
+                    "profitability_adjustment_policies_for_profit_developer"].items():
+
+            if orca.get_injectable("scenario") in \
+                    policy["enable_in_scenarios"]:
+
+                parcels_geography = orca.get_table("parcels_geography")
+
+                if "alternate_geography_scenarios" in policy and \
+                        orca.get_injectable("scenario") in \
+                        policy["alternate_geography_scenarios"]:
+                    formula = policy["alternate_adjustment_formula"]
+                else:
+                    formula = policy["profitability_adjustment_formula"]
+
+                pct_modifications = \
+                    parcels_geography.local.eval(formula)
+                pct_modifications += 1.0
+
+                print("Modifying profit for %s:\n" % policy["name"],
+                      pct_modifications.describe())
+
+                feasibility[("residential", "max_profit")] *= pct_modifications
+
+    if (developer_type == "subsidized") and ("profitability_adjustment_policies_subsidized_developer" in policy["acct_settings"]):
+        for key, policy in \
+                policy["acct_settings"][
+                    "profitability_adjustment_policies_subsidized_developer"].items():
 
             if orca.get_injectable("scenario") in \
                     policy["enable_in_scenarios"]:
@@ -719,7 +744,7 @@ def subsidized_residential_feasibility(
     feasibility.columns = pd.MultiIndex.from_tuples(
             [("residential", col) for col in feasibility.columns])
 
-    feasibility = policy_modifications_of_profit(feasibility, parcels)
+    feasibility = policy_modifications_of_profit(feasibility, parcels, "subsidized")
 
     orca.add_table("feasibility", feasibility)
 
