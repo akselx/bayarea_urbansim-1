@@ -1328,8 +1328,8 @@ acct_settings:
       alternate_geography_scenarios: ["23"]
       alternate_adjustment_formula: "((gg_id == 'GG' & (tra_id == 'tra1'| tra_id = 'tra2c1' | tra_id = 'tra3c1') & esit_id == '' & ppa_id == '') | (gg_id == 'GG' & tra_id = 'tra3' & sesit_id == 'HRA' & ppa_id == '')) * .075"
 
-    reduce_housing_costs_no_crossing_tier_3_subsidized_developer:
-      name: "Reduce Cost - Subsidized Developer - No Crossing - Tier 3: -5%"
+    reduce_housing_costs_tier_3_subsidized_developer:
+      name: "Reduce Cost - Subsidized Developer - Tier 3: -5%"
       enable_in_scenarios: ["20", "21", "22"]
       # GG + TRA3 or GG + HRA
       profitability_adjustment_formula: "((gg_id == 'GG' & (tra_id == 'tra3'| tra_id = 'tra3c1' | tra_id = 'tra3c1') & esit_id == '' & ppa_id == '') | (gg_id == 'GG' & tra_id = '' & sesit_id == 'HRA' & ppa_id == '')) * .05"
