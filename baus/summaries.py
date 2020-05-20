@@ -157,13 +157,13 @@ def config(policy, inputs, run_number, scenario, parcels,
 
     # AV parking requirements
     policy_loc = (policy["acct_settings"]
-                  ["profitability_adjustment_policies"]
+                  ["profitability_adjustment_policies_for_profit_developer"]
                   ["parking_requirements_AVs_s1"])
     policy_nm = "Reduce Parking Requirements due to AVs (CAG)"
     policy_activated(policy_loc, policy_nm, scenario)
 
     policy_loc = (policy["acct_settings"]
-                  ["profitability_adjustment_policies"]
+                  ["profitability_adjustment_policies_for_profit_developer"]
                   ["parking_requirements_AVs_s5"])
     policy_nm = "Reduce Parking Requirements due to AVs (BTTF)"
     policy_activated(policy_loc, policy_nm, scenario)
@@ -227,14 +227,14 @@ def config(policy, inputs, run_number, scenario, parcels,
 
     # CEQA
     policy_loc = (policy["acct_settings"]
-                  ["profitability_adjustment_policies"]["ceqa_tiering"])
+                  ["profitability_adjustment_policies_for_profit_developer"]["ceqa_tiering"])
     policy_nm = "CEQA"
     policy_activated(policy_loc, policy_nm, scenario)
     write("")
 
     # PDA parking requirements
     policy_loc = (policy["acct_settings"]
-                  ["profitability_adjustment_policies"]
+                  ["profitability_adjustment_policies_for_profit_developer"]
                   ["parking_requirements_pdas"])
     policy_nm = "Reduce Parking Requirements in PDAs"
     policy_activated(policy_loc, policy_nm, scenario)
