@@ -42,8 +42,13 @@ def coffer(policy):
         "vmt_com_acct":  accounts.Account("vmt_com_acct")
     }
 
-    for key, acct in policy["acct_settings"]["lump_sum_accounts"].items():
-        d[acct["name"]] = accounts.Account(acct["name"])
+    if scenario not in ["20", "21", "22", "23"]:
+        for key, acct in policy["acct_settings"]["lump_sum_accounts"].items():
+            d[acct["name"]] = accounts.Account(acct["name"])
+
+    elif scenario in ["20", "21", "22", "23"]:
+        for key, acct in policy["acct_settings"]["lump_sum_accounts_d_b"].items():
+            d[acct["name"]] = accounts.Account(acct["name"])        
 
     return d
 
@@ -57,31 +62,60 @@ def acct_settings(policy):
 def lump_sum_accounts(policy, year, buildings, coffer,
                       summary, years_per_iter, scenario):
 
-    s = policy["acct_settings"]["lump_sum_accounts"]
+    if scenario not in ["20", "21", "22", "23"]:
 
-    for key, acct in s.items():
+        s = policy["acct_settings"]["lump_sum_accounts"]
 
-        if scenario not in acct["enable_in_scenarios"]:
-            continue
+        for key, acct in s.items():
 
-        if "alternate_geography_scenarios" in acct and \
-                scenario in acct["alternate_geography_scenarios"]:
-            acct["receiving_buildings_filter"] = \
-                acct["alternate_buildings_filter"]
+            if scenario not in acct["enable_in_scenarios"]:
+                continue
 
-        amt = float(acct["total_amount"])
+            if "alternate_geography_scenarios" in acct and \
+                    scenario in acct["alternate_geography_scenarios"]:
+                acct["receiving_buildings_filter"] = \
+                    acct["alternate_buildings_filter"]
 
-        amt *= years_per_iter
+            amt = float(acct["total_amount"])
 
-        metadata = {
-            "description": "%s subsidies" % acct["name"],
-            "year": year
-        }
-        # the subaccount is meaningless here (it's a regional account) -
-        # but the subaccount number is referred to below
-        coffer[acct["name"]].add_transaction(amt, subaccount=1,
-                                             metadata=metadata)
+            amt *= years_per_iter
 
+            metadata = {
+                "description": "%s subsidies" % acct["name"],
+                "year": year
+            }
+            print(metadata)
+            # the subaccount is meaningless here (it's a regional account) -
+            # but the subaccount number is referred to below
+            coffer[acct["name"]].add_transaction(amt, subaccount=1,
+                                                 metadata=metadata)
+    elif scenario in ["20", "21", "22", "23"]:
+
+        s = policy["acct_settings"]["lump_sum_accounts_d_b"]
+
+        for key, acct in s.items():
+
+            if scenario not in acct["enable_in_scenarios"]:
+                continue
+
+            if scenario in acct["enable_in_scenarios"]:
+                amt = float(acct["total_amount"])
+
+            elif scenario in acct["alternate_amount_scenarios"]:
+                amt = float(acct["alternate_total_amount"])
+            
+            amt *= years_per_iter
+
+            metadata = {
+                "description": "%s subsidies" % acct["name"],
+                "year": year
+            }
+            print(metadata)
+            # the subaccount is meaningless here (it's a regional account) -
+            # but the subaccount number is referred to below
+            coffer[acct["name"]].add_transaction(amt, subaccount=1,
+                                                 metadata=metadata)
+                
 
 # this will compute the reduction in revenue from a project due to
 # inclustionary housing - the calculation will be described in thorough
@@ -762,38 +796,78 @@ def subsidized_residential_developer_lump_sum_accts(
         policy, summary, coffer, form_to_btype_func,
         scenario, settings):
 
-    for key, acct in policy["acct_settings"]["lump_sum_accounts"].items():
+    if scenario not in ["20", "21", "22", "23"]:
 
-        # quick return in order to save performance time
-        if scenario not in acct["enable_in_scenarios"]:
-            continue
+        for key, acct in policy["acct_settings"]["lump_sum_accounts"].items():
 
-        print("Running the subsidized developer for acct: %s" % acct["name"])
+            # quick return in order to save performance time
+            if scenario not in acct["enable_in_scenarios"]:
+                continue
 
-        # need to rerun the subsidized feasibility every time and get new
-        # results - this is not ideal and is a story to fix in pivotal, but the
-        # only cost is in time - the results should be the same
-        orca.eval_step("subsidized_residential_feasibility")
-        feasibility = orca.get_table("feasibility").to_frame()
-        feasibility = feasibility.stack(level=0).\
-            reset_index(level=1, drop=True)
+            print("Running the subsidized developer for acct: %s" % acct["name"])
 
-        run_subsidized_developer(feasibility,
-                                 parcels,
-                                 buildings,
-                                 households,
-                                 acct,
-                                 settings,
-                                 coffer[acct["name"]],
-                                 year,
-                                 form_to_btype_func,
-                                 add_extra_columns_func,
-                                 summary,
-                                 create_deed_restricted=acct[
-                                    "subsidize_affordable"],
-                                 policy_name=acct["name"])
+            # need to rerun the subsidized feasibility every time and get new
+            # results - this is not ideal and is a story to fix in pivotal, but the
+            # only cost is in time - the results should be the same
+            orca.eval_step("subsidized_residential_feasibility")
+            feasibility = orca.get_table("feasibility").to_frame()
+            feasibility = feasibility.stack(level=0).\
+                reset_index(level=1, drop=True)
 
-        buildings = orca.get_table("buildings")
+            run_subsidized_developer(feasibility,
+                                     parcels,
+                                     buildings,
+                                     households,
+                                     acct,
+                                     settings,
+                                     coffer[acct["name"]],
+                                     year,
+                                     form_to_btype_func,
+                                     add_extra_columns_func,
+                                     summary,
+                                     create_deed_restricted=acct[
+                                        "subsidize_affordable"],
+                                     policy_name=acct["name"])
 
-        # set to an empty dataframe to save memory
-        orca.add_table("feasibility", pd.DataFrame())
+            buildings = orca.get_table("buildings")
+
+            # set to an empty dataframe to save memory
+            orca.add_table("feasibility", pd.DataFrame())
+
+    elif scenario in ["20", "21", "22", "23"]:
+
+        for key, acct in policy["acct_settings"]["lump_sum_accounts_d_b"].items():
+
+            # quick return in order to save performance time
+            if scenario not in acct["enable_in_scenarios"]:
+                continue
+
+            print("Running the subsidized developer for acct: %s" % acct["name"])
+
+            # need to rerun the subsidized feasibility every time and get new
+            # results - this is not ideal and is a story to fix in pivotal, but the
+            # only cost is in time - the results should be the same
+            orca.eval_step("subsidized_residential_feasibility")
+            feasibility = orca.get_table("feasibility").to_frame()
+            feasibility = feasibility.stack(level=0).\
+                reset_index(level=1, drop=True)
+
+            run_subsidized_developer(feasibility,
+                                     parcels,
+                                     buildings,
+                                     households,
+                                     acct,
+                                     settings,
+                                     coffer[acct["name"]],
+                                     year,
+                                     form_to_btype_func,
+                                     add_extra_columns_func,
+                                     summary,
+                                     create_deed_restricted=acct[
+                                        "subsidize_affordable"],
+                                     policy_name=acct["name"])
+
+            buildings = orca.get_table("buildings")
+
+            # set to an empty dataframe to save memory
+            orca.add_table("feasibility", pd.DataFrame())
