@@ -618,10 +618,9 @@ def get_dev_projects_table(scenario, parcels):
     df = reprocess_dev_projects(df)
 
     # this filters project by scenario
-    scen = 'scen' + str(scenario)
-    if scen in df:
+    if scenario in df:
         # df[scenario] is 1s and 0s indicating whether to include it
-        df = df[df[scen].astype('bool')]
+        df = df[df[scenario].astype('bool')]
 
     df = df.dropna(subset=['geom_id'])
 
