@@ -47,8 +47,9 @@ def coffer(policy, scenario):
             d[acct["name"]] = accounts.Account(acct["name"])
 
     elif scenario in ["20", "21", "22", "23"]:
-        for key, acct in policy["acct_settings"]["lump_sum_accounts_d_b"].items():
-            d[acct["name"]] = accounts.Account(acct["name"])        
+        for key, acct in \
+            policy["acct_settings"]["lump_sum_accounts_d_b"].items():
+            d[acct["name"]] = accounts.Account(acct["name"])
 
     return d
 
@@ -103,7 +104,7 @@ def lump_sum_accounts(policy, year, buildings, coffer,
 
             elif scenario in acct["alternate_amount_scenarios"]:
                 amt = float(acct["alternate_total_amount"])
-            
+
             amt *= years_per_iter
 
             metadata = {
@@ -115,7 +116,7 @@ def lump_sum_accounts(policy, year, buildings, coffer,
             # but the subaccount number is referred to below
             coffer[acct["name"]].add_transaction(amt, subaccount=1,
                                                  metadata=metadata)
-                
+
 
 # this will compute the reduction in revenue from a project due to
 # inclustionary housing - the calculation will be described in thorough
@@ -804,7 +805,8 @@ def subsidized_residential_developer_lump_sum_accts(
             if scenario not in acct["enable_in_scenarios"]:
                 continue
 
-            print("Running the subsidized developer for acct: %s" % acct["name"])
+            print("Running the subsidized developer \
+                  for acct: %s" % acct["name"])
 
             # need to rerun the subsidized feasibility every time and get new
             # results - this is not ideal and is a story to fix in pivotal, but the
@@ -836,17 +838,19 @@ def subsidized_residential_developer_lump_sum_accts(
 
     elif scenario in ["20", "21", "22", "23"]:
 
-        for key, acct in policy["acct_settings"]["lump_sum_accounts_d_b"].items():
+        for key, acct in \
+            policy["acct_settings"]["lump_sum_accounts_d_b"].items():
 
             # quick return in order to save performance time
             if scenario not in acct["enable_in_scenarios"]:
                 continue
 
-            print("Running the subsidized developer for acct: %s" % acct["name"])
+            print("Running the subsidized developer \
+                  for acct: %s" % acct["name"])
 
             # need to rerun the subsidized feasibility every time and get new
-            # results - this is not ideal and is a story to fix in pivotal, but the
-            # only cost is in time - the results should be the same
+            # results - this is not ideal and is a story to fix in pivotal,
+            # but the only cost is in time - the results should be the same
             orca.eval_step("subsidized_residential_feasibility")
             feasibility = orca.get_table("feasibility").to_frame()
             feasibility = feasibility.stack(level=0).\
