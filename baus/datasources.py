@@ -114,16 +114,23 @@ def inclusionary_housing_settings(policy, scenario):
     # for inclustionary housing, each scenario is different
     # there is no inheritance
 
-    print("inclusionary_fr2_enable", policy["inclusionary_fr2_enable"])
-    print("inclusionary_d_b_enable", policy["inclusionary_d_b_enable"])
+    print("inclusionary_fr2", policy["inclusionary_housing_settings_fr2"].keys())
+    print("inclusionary_d_b", policy["inclusionary_housing_settings_d_b"].keys())
 
     s = policy['inclusionary_housing_settings']
+    s_fr2 = policy["inclusionary_housing_settings_fr2"]
+    s_d_b = policy["inclusionary_housing_settings_d_b"]
 
-    if (scenario in ["foo", "11", "12", "15"]) and\
-       (scenario not in policy["inclusionary_fr2_enable"]):
+    if (scenario in ["11", "12", "15"]) and\
+       (scenario not in s_fr2.keys()):
         print("Using Futures Round 1 (PBA40) inclusionary settings")
+        s = policy["inclusionary_housing_settings_fr2"]
         fr1 = str(int(scenario) - 10)
-        s = s[fr1]
+        s = s_fr2[fr1]
+
+    elif scenario in s_d_b.keys():
+        print("Using inclusionary settings for scenario: %s" % scenario)
+        s = s_d_b[scenario]
 
     elif scenario in s.keys():
         print("Using inclusionary settings for scenario: %s" % scenario)
@@ -134,7 +141,7 @@ def inclusionary_housing_settings(policy, scenario):
         s = s["default"]
 
     d = {}
-    if (scenario in policy["inclusionary_d_b_enable"]):
+    if (scenario in s_d_b.keys()):
         for item in s:
             # this is a list of Blueprint strategy geographies - represented
             # by pba50chcat - with an inclusionary rate that is the same
