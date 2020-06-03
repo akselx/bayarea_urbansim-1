@@ -26,8 +26,6 @@ def test_limits_settings():
 
 def test_inclusionary_housing_settings():
     inclusionary_housing_settings = {
-        "inclusionary*": ["foo"],
-        "inclusionary*": ["foo"],
         "foo": [{
             "amount": .2,
             "values": [
