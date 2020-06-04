@@ -68,15 +68,11 @@ def test_inclusionary_housing_settings():
         }]
     }
     out = datasources.inclusionary_housing_settings({
-        "inclusionary_housing_settings": inclusionary_housing_settings
+        "inclusionary_housing_settings": inclusionary_housing_settings,
+        "inclusionary_housing_settings_fr2": inclusionary_housing_settings,
+        "inclusionary_housing_settings_d_b": inclusionary_housing_settings
     }, "foo")
-    out_fr2 = datasources.inclusionary_housing_settings_fr2({
-        "inclusionary_housing_settings_fr2": inclusionary_housing_settings_fr2
-    }, "foo")
-    out_d_b = datasources.inclusionary_housing_settings_d_b({
-        "inclusionary_housing_settings_d_b": inclusionary_housing_settings_d_b
-    }, "foo")
-
-    assert ((out["Berkeley"] == .2) or (out_fr2["Berkeley"] == .2) or (out_d_b["Berkeley"] == .2))
-    assert ((out["Oakland"] == .2) or (out_fr2["Oakland"] == .2) or (out_d_b["Oakland"] == .2))
-    assert ((out["San Francisco"] == .1) or (out_fr2["San Francisco"] == .1) or (out_d_b["San Francisco"] == .1))
+    
+    assert out["Berkeley"] == .2
+    assert out["Oakland"] == .2
+    assert out["San Francisco"] == .1
