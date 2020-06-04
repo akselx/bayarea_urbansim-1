@@ -44,7 +44,7 @@ def test_inclusionary_housing_settings():
         "inclusionary_housing_settings_fr2": inclusionary_housing_settings,
         "inclusionary_housing_settings_d_b": inclusionary_housing_settings
     }, "foo")
-    
+
     assert out["Berkeley"] == .2
     assert out["Oakland"] == .2
     assert out["San Francisco"] == .1
