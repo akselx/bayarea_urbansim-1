@@ -39,34 +39,6 @@ def test_inclusionary_housing_settings():
             ]
         }]
     }
-    inclusionary_housing_settings_fr2 = {
-        "foo": [{
-            "amount": .2,
-            "values": [
-                "Berkeley",
-                "Oakland"
-            ]
-        }, {
-            "amount": .1,
-            "values": [
-                "San Francisco"
-            ]
-        }]
-    }
-    inclusionary_housing_settings_d_b = {
-        "foo": [{
-            "amount": .2,
-            "values": [
-                "Berkeley",
-                "Oakland"
-            ]
-        }, {
-            "amount": .1,
-            "values": [
-                "San Francisco"
-            ]
-        }]
-    }
     out = datasources.inclusionary_housing_settings({
         "inclusionary_housing_settings": inclusionary_housing_settings,
         "inclusionary_housing_settings_fr2": inclusionary_housing_settings,
