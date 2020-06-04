@@ -114,17 +114,17 @@ def inclusionary_housing_settings(policy, scenario):
     # for inclustionary housing, each scenario is different
     # there is no inheritance
 
-    print("inclusionary_fr2", policy["inclusionary_housing_settings_fr2"].keys())
-    print("inclusionary_d_b", policy["inclusionary_housing_settings_d_b"].keys())
+    #print("inclusionary_fr2", policy['inclusionary_housing_settings_fr2'].keys())
+    #print("inclusionary_d_b", policy['inclusionary_housing_settings_d_b'].keys())
 
     s = policy['inclusionary_housing_settings']
-    s_fr2 = policy["inclusionary_housing_settings_fr2"]
-    s_d_b = policy["inclusionary_housing_settings_d_b"]
+    s_fr2 = policy['inclusionary_housing_settings_fr2']
+    s_d_b = policy['inclusionary_housing_settings_d_b']
 
     if (scenario in ["11", "12", "15"]) and\
        (scenario not in s_fr2.keys()):
         print("Using Futures Round 1 (PBA40) inclusionary settings")
-        s = policy["inclusionary_housing_settings_fr2"]
+        s = s_fr2[scenario]
         fr1 = str(int(scenario) - 10)
         s = s_fr2[fr1]
 
