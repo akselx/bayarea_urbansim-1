@@ -70,11 +70,11 @@ def test_inclusionary_housing_settings():
     out = datasources.inclusionary_housing_settings({
         "inclusionary_housing_settings": inclusionary_housing_settings
     }, "foo")
-    out_fr2 = datasources.inclusionary_housing_settings({
-        "inclusionary_housing_settings": inclusionary_housing_settings_fr2
+    out_fr2 = datasources.inclusionary_housing_settings_fr2({
+        "inclusionary_housing_settings_fr2": inclusionary_housing_settings_fr2
     }, "foo")
-    out_d_b = datasources.inclusionary_housing_settings({
-        "inclusionary_housing_settings": inclusionary_housing_settings_d_b
+    out_d_b = datasources.inclusionary_housing_settings_d_b({
+        "inclusionary_housing_settings_d_b": inclusionary_housing_settings_d_b
     }, "foo")
 
     assert ((out["Berkeley"] == .2) or (out_fr2["Berkeley"] == .2) or (out_d_b["Berkeley"] == .2))
