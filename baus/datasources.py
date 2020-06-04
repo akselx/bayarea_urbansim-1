@@ -114,9 +114,6 @@ def inclusionary_housing_settings(policy, scenario):
     # for inclustionary housing, each scenario is different
     # there is no inheritance
 
-    #print("inclusionary_fr2", policy['inclusionary_housing_settings_fr2'].keys())
-    #print("inclusionary_d_b", policy['inclusionary_housing_settings_d_b'].keys())
-
     s = policy['inclusionary_housing_settings']
     s_fr2 = policy['inclusionary_housing_settings_fr2']
     s_d_b = policy['inclusionary_housing_settings_d_b']
@@ -646,7 +643,7 @@ def reprocess_dev_projects(df):
 
 # shared between demolish and build tables below
 def get_dev_projects_table(scenario, parcels):
-    df = pd.read_csv(os.path.join(misc.data_dir(), "development_projects_21.csv"))
+    df = pd.read_csv(os.path.join(misc.data_dir(), "development_projects.csv"))
     df = reprocess_dev_projects(df)
 
     # this filters project by scenario
