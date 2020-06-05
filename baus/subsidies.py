@@ -101,7 +101,9 @@ def inclusionary_housing_revenue_reduction(feasibility, units):
     households = orca.get_table("households")
     buildings = orca.get_table("buildings")
     parcels_geography = orca.get_table("parcels_geography")
-    if orca.get_injectable("scenario") in ["20", "21", "22", "23"]:
+    policy = orca.get_injectable("policy")
+
+    if orca.get_injectable("scenario") in policy["inclusionary_d_b_enable"]:
         h = orca.merge_tables("households",
                               [households, buildings, parcels_geography],
                               columns=["juris_name",
@@ -143,7 +145,7 @@ def inclusionary_housing_revenue_reduction(feasibility, units):
 
     # for Blueprint scenarios, calculate revenue reduction by
     # Blueprint strategy geogrphies pba50chcat
-    if orca.get_injectable("scenario") in ["20", "21", "22", "23"]:
+    if orca.get_injectable("scenario") in policy["inclusionary_d_b_enable"]:
         pba50chcat = parcels_geography.pba50chcat.loc[feasibility.index]
         pct_affordable = pba50chcat.map(pct_inclusionary).fillna(0)
         value_can_afford = pba50chcat.map(value_can_afford)
@@ -220,6 +222,8 @@ def policy_modifications_of_profit(feasibility, parcels):
         feasibility[(use, "max_profit")] -= fees
 
     # this section adds inclusionary housing reduction in revenue
+    policy = orca.get_injectable("policy")
+
     revenue_reduction, num_affordable_units = \
         inclusionary_housing_revenue_reduction(feasibility, units)
 
@@ -238,8 +242,6 @@ def policy_modifications_of_profit(feasibility, parcels):
         num_affordable_units
     feasibility[("residential", "inclusionary_units")] = \
         num_affordable_units
-
-    policy = orca.get_injectable("policy")
 
     if "sb743_settings" in policy["acct_settings"]:
 
