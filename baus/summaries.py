@@ -789,16 +789,47 @@ def geographic_summary(parcels, households, jobs, buildings, taz_geography,
                  'zone_id', 'residential_units', 'building_sqft',
                  'non_residential_sqft', 'juris_trich'])
 
+    if scenario in policy["geographies_db_enable"]:
+        households_df = orca.merge_tables(
+            'households',
+            [parcels, buildings, households],
+            columns=['pda', 'zone_id', 'juris', 'superdistrict',
+                    'persons', 'income', 'base_income_quartile',
+                    'juris_trich','tra_id', 'ppa_id', 'sesit_id',
+                    'juris_tra', 'juris_hra', 'juris_tra_hra'])
+
+        jobs_df = orca.merge_tables(
+            'jobs',
+            [parcels, buildings, jobs],
+            columns=['pda', 'superdistrict', 'juris', 'zone_id',
+                    'empsix', 'juris_trich','tra_id', 'ppa_id', 
+                    'sesit_id', 'juris_tra', 
+                    'juris_hra', 'juris_tra_hra'])
+
+        buildings_df = orca.merge_tables(
+            'buildings',
+            [parcels, buildings],
+            columns=['pda', 'superdistrict', 'juris', 'building_type',
+                    'zone_id', 'residential_units', 'building_sqft',
+                    'non_residential_sqft', 'juris_trich',
+                    'tra_id', 'ppa_id', 'sesit_id', 'juris_tra', 
+                    'juris_hra', 'juris_tra_hra'])
+
     parcel_output = summary.parcel_output
 
     # because merge_tables returns multiple zone_id_'s, but not the one we need
     buildings_df = buildings_df.rename(columns={'zone_id_x': 'zone_id'})
 
-    geographies = ['superdistrict', 'pda', 'juris']
+    geographies = ['superdistrict', 'pda', 'juris','juris_tra', 
+                   'juris_hra', 'juris_tra_hra']
 
     if (scenario in ["11", "12", "15"]) and\
        (scenario in policy["geographies_fr2_enable"]):
         geographies.append('juris_trich')
+    
+    # append Draft Blueprint strategy geographis
+    if scenario in policy["geographies_db_enable"]:
+        geographies.extend('tra_id', 'ppa_id', 'sesit_id')
 
     if year in [2010, 2015, 2020, 2025, 2030, 2035, 2040, 2045, 2050]:
 
