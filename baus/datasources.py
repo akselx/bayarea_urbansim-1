@@ -502,7 +502,7 @@ def parcels_geography(parcels, scenario, settings):
         df["sesit_id"] = df.sesit_id.str.lower()
         df["juris_tra"] = df.juris_id + df.tra_id
         df["juris_hra"] = df.juris_id + df.sesit_id
-        df["juris_tra_hra"] = df.juris_id + '-' + df.tra_id + '-' df.sesit_id
+        df["juris_tra_hra"] = df.juris_id + '-' + df.tra_id + '-' + df.sesit_id
     return df
 
 
