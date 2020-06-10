@@ -486,11 +486,20 @@ def parcels_geography(parcels, scenario, settings):
 
     df['juris_trich'] = df.juris_id + df.trich_id
 
-    df["pda_id"] = df.pda_id.str.lower()
+    if scenario not in ["20", "21", "22", "23"]:
+        df["pda_id"] = df.pda_id.str.lower()
+        # danville wasn't supposed to be a pda
+        df["pda_id"] = df.pda_id.replace("dan1", np.nan)
 
-    # danville wasn't supposed to be a pda
-    df["pda_id"] = df.pda_id.replace("dan1", np.nan)
-
+    # Draft Blueprint scenarios
+    elif scenario in ["20", "21", "22", "23"]:
+        print("Use Draft Blueprint PDA IDs")
+        # use Draft Blueprint PDA IDs
+        df["pda_id"] = df.pda_id_db.str.lower()
+        # add other geographies: TRAs, PPA, sesit
+        df["tra_id"] = df.tra_id.str.lower()
+        df["ppa_id"] = df.ppa_id.str.lower()
+        df["sesit_id"] = df.sesit_id.str.lower()
     return df
 
 
