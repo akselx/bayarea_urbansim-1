@@ -224,11 +224,16 @@ def get_simulation_models(SCENARIO):
     # calculate VMT taxes
     vmt_settings = \
         orca.get_injectable("policy")["acct_settings"]["vmt_settings"]
-    if SCENARIO in vmt_settings["com_for_com_scenarios"]:
+    if SCENARIO in vmt_settings["com_for_com_scenarios"] and \
+            SCENARIO not in ["21", "22", "23"]:
         models.insert(models.index("office_developer"),
                       "subsidized_office_developer")
 
-    if SCENARIO in vmt_settings["com_for_res_scenarios"] or \
+    elif SCENARIO in vmt_settings["com_for_com_scenarios"] and \
+            SCENARIO in ["21", "22", "23"]:
+        models.insert(models.index("office_developer"))
+
+    elif SCENARIO in vmt_settings["com_for_res_scenarios"] or \
             SCENARIO in vmt_settings["res_for_res_scenarios"]:
 
         models.insert(models.index("diagnostic_output"),
