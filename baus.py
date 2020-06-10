@@ -229,10 +229,6 @@ def get_simulation_models(SCENARIO):
         models.insert(models.index("office_developer"),
                       "subsidized_office_developer")
 
-    elif SCENARIO in vmt_settings["com_for_com_scenarios"] and \
-            SCENARIO in vmt_settings["dp_geography_scenarios"]:
-        models.insert(models.index("office_developer"))
-
     elif SCENARIO in vmt_settings["com_for_res_scenarios"] or \
             SCENARIO in vmt_settings["res_for_res_scenarios"]:
 
